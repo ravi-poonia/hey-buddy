@@ -1,8 +1,13 @@
-import {createStackNavigator} from 'react-navigation-stack';
+import { createStackNavigator } from 'react-navigation-stack';
 import Login from '../screens/Auth/Login';
 
 const AuthStack = createStackNavigator({
-  Login: Login,
+  Login: {
+    screen: Login,
+    navigationOptions: ({ navigation }) => ({
+      header: null,
+    }),
+  },
 });
 
 export default AuthStack;

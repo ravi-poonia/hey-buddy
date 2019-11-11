@@ -6,13 +6,14 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {StatusBar} from 'react-native';
-import {Provider} from 'react-redux';
-import {PersistGate} from 'redux-persist/integration/react';
+import React, { Component } from 'react';
+import { StatusBar } from 'react-native';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import SplashScreen from 'react-native-splash-screen';
-import {store, persistor} from './src/redux/Store';
+import { store, persistor } from './src/redux/Store';
 import AppNavigation from './src/navigation/AppNavigation';
+import { Colors } from './src/styles';
 
 export default class App extends Component {
   componentDidMount() {
@@ -24,7 +25,10 @@ export default class App extends Component {
   render() {
     return (
       <>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar
+          backgroundColor={Colors.statusBar}
+          barStyle="light-content"
+        />
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <AppNavigation />
