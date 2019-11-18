@@ -1,25 +1,29 @@
 
-import React from 'react';
+import React, { Component } from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 import { Spacing } from '../styles';
 
-export default function CustomInput({ icon, ...rest }) {
-
-  return (
-    <View style={styles.container}>
-      {icon}
-      <TextInput
-        {...rest}
-        style={styles.input}
-        placeholderTextColor={'#bdc5cf'}
-        underlineColorAndroid="transparent"
-      />
-    </View>
-  );
+export default class CustomInput extends Component {
+  render() {
+    const { icon, getRef, ...rest } = this.props;
+    return (
+      <View style={styles.container}>
+        {icon}
+        <TextInput
+          ref={getRef}
+          {...rest}
+          style={styles.input}
+          placeholderTextColor={'#bdc5cf'}
+          underlineColorAndroid="transparent"
+        />
+      </View>
+    );
+  }
 }
 
 CustomInput.defaultProps = {
   icon: <View />,
+  getRef: null,
 };
 
 const styles = StyleSheet.create({

@@ -7,15 +7,19 @@
  */
 
 import React, { Component } from 'react';
-import { View, ScrollView, Text, Image, Picker, ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, ScrollView, Text, Image, ImageBackground, StyleSheet, Platform, TouchableOpacity } from 'react-native';
 import { Spacing } from '../../../styles';
 import CustomInput from '../../../components/CustomInput';
 import MaterialIcon from 'react-native-vector-icons/dist/MaterialIcons';
 import FeatherIcon from 'react-native-vector-icons/dist/Feather';
 import SimpleLineIcons from 'react-native-vector-icons/dist/SimpleLineIcons';
 import CustomPicker from '../../../components/CustomPicker';
+import { AppLoading } from '../../../components/AppLoading';
+import { KeyboardAvoidingView } from 'react-native';
 
 export default class Login extends Component {
+
+  inputs = {};
 
   state = {
     selectedTab: 'login',
@@ -61,6 +65,10 @@ export default class Login extends Component {
     );
   }
 
+  focusTheField = (id) => {
+    this.inputs[id].focus();
+  }
+
   handleTextChange = (id, value) => {
     let { formData } = this.state;
     formData[id] = value;
@@ -79,11 +87,20 @@ export default class Login extends Component {
               size={25}
               color="#bdc5cf" />
           }
+          autoCompleteType={'username'}
+          onSubmitEditing={() => { this.focusTheField('password'); }}
+          blurOnSubmit={false}
+          autoFocus={true}
+          enablesReturnKeyAutomatically={true}
+          keyboardType={'email-address'}
+          returnKeyType={'next'}
+          textContentType={'username'}
           value={formData.email}
           onChangeText={(value) => this.handleTextChange('email', value)}
           placeholder="Username"
         />
         <CustomInput
+          getRef={input => { this.inputs.password = input; }}
           icon={
             <FeatherIcon
               style={styles.inputIcon}
@@ -91,8 +108,10 @@ export default class Login extends Component {
               size={20}
               color="#bdc5cf" />
           }
+          autoCompleteType={'password'}
+          textContentType={'password'}
+          secureTextEntry={true}
           value={formData.password}
-          type="password"
           onChangeText={(value) => this.handleTextChange('password', value)}
           placeholder="Password"
         />
@@ -151,6 +170,7 @@ export default class Login extends Component {
           placeholder="Phone number"
         />
         <CustomPicker
+          getRef={this.picker}
           icon={
             <SimpleLineIcons
               style={styles.inputIcon}
@@ -159,6 +179,11 @@ export default class Login extends Component {
               color="#bdc5cf" />
           }
           id="course"
+          placeholder={{
+            label: 'Select a course...',
+            value: null,
+            color: '#9EA0A4',
+          }}
           value={formData.course}
           onChange={this.handleCourseChange}
           options={[
@@ -172,7 +197,47 @@ export default class Login extends Component {
             },
           ]}
         />
-
+        <CustomInput
+          id="blood_group"
+          icon={
+            <SimpleLineIcons
+              style={styles.inputIcon}
+              name="drop"
+              size={20}
+              color="#bdc5cf" />
+          }
+          placeholder="Blood Group"
+        />
+        <CustomInput
+          getRef={input => { this.inputs.password = input; }}
+          icon={
+            <FeatherIcon
+              style={styles.inputIcon}
+              name="lock"
+              size={20}
+              color="#bdc5cf" />
+          }
+          autoCompleteType={'password'}
+          textContentType={'password'}
+          secureTextEntry={true}
+          value={formData.password}
+          onChangeText={(value) => this.handleTextChange('password', value)}
+          placeholder="Password"
+        />
+        <CustomInput
+          getRef={input => { this.inputs.password = input; }}
+          icon={
+            <FeatherIcon
+              style={styles.inputIcon}
+              name="lock"
+              size={20}
+              color="#bdc5cf" />
+          }
+          secureTextEntry={true}
+          value={formData.password}
+          onChangeText={(value) => this.handleTextChange('password', value)}
+          placeholder="Confirm Password"
+        />
       </>
     );
   }
@@ -200,53 +265,58 @@ export default class Login extends Component {
 
   render() {
     const { selectedTab } = this.state;
+    const { loading } = this.props;
+
     return (
-      <ImageBackground
-        source={require('./../../../assets/images/login-background.png')}
-        style={styles.imageTopContainer}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollView}>
-          <View style={styles.container}>
-            <View style={styles.topContainer}>
-              <Image
-                source={require('./../../../assets/images/logo.png')}
-                resizeMode="contain"
-                style={styles.logo} />
-            </View>
-            <View >
-              <View style={styles.bodyContainer}>
-                <View style={styles.boxContainer}>
-                  {this.renderTabs()}
-                  {
-                    selectedTab === 'login' ?
-                      this.renderLoginContent()
-                      :
-                      this.renderSignUpContent()
-                  }
+      <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined} enabled>
+        <AppLoading isVisible={loading} />
+        <ImageBackground
+          source={require('./../../../assets/images/login-background.png')}
+          style={styles.imageTopContainer}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.scrollView}>
+            <View style={styles.container}>
+              <View style={styles.topContainer}>
+                <Image
+                  source={require('./../../../assets/images/logo.png')}
+                  resizeMode="contain"
+                  style={styles.logo} />
+              </View>
+              <View >
+                <View style={styles.bodyContainer}>
+                  <View style={styles.boxContainer}>
+                    {this.renderTabs()}
+                    {
+                      selectedTab === 'login' ?
+                        this.renderLoginContent()
+                        :
+                        this.renderSignUpContent()
+                    }
+                  </View>
                 </View>
+                {this.renderButton()}
               </View>
-              {this.renderButton()}
-            </View>
-            <View style={styles.bottomContainer}>
-              <View style={styles.textContainer}>
-                <Text style={styles.orText}>OR </Text>
-                <Text style={styles.boldText}>
-                  {
-                    selectedTab === 'login' ?
-                      ' SignIn with'
-                      :
-                      ' SignUp with'
-                  }
-                </Text>
+              <View style={styles.bottomContainer}>
+                <View style={styles.textContainer}>
+                  <Text style={styles.orText}>OR </Text>
+                  <Text style={styles.boldText}>
+                    {
+                      selectedTab === 'login' ?
+                        ' SignIn with'
+                        :
+                        ' SignUp with'
+                    }
+                  </Text>
+                </View>
+                <TouchableOpacity style={styles.googleButton}>
+                  <Text style={styles.googleText}>Google</Text>
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity style={styles.googleButton}>
-                <Text style={styles.googleText}>Google</Text>
-              </TouchableOpacity>
             </View>
-          </View>
-        </ScrollView>
-      </ImageBackground >
+          </ScrollView>
+        </ImageBackground >
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -257,8 +327,7 @@ const styles = StyleSheet.create({
     zIndex: -10,
     height: Spacing.dimensions.fullHeight,
   },
-  scrollView: {
-  },
+  scrollView: {},
   container: {
     display: 'flex',
     justifyContent: 'space-between',

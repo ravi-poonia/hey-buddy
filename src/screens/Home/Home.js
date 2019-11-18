@@ -37,7 +37,7 @@ export default class Home extends Component {
             />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigation.navigate('Filter')}
+            onPress={() => navigation.navigate('Auth')}
             style={{ marginRight: 15 }}>
             <MaterialCommunityIcons
               name="message-text-outline"

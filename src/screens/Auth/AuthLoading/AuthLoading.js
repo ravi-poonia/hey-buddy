@@ -26,7 +26,7 @@ export default class AuthLoading extends Component {
 
   render() {
     return (
-      <AppLoading />
+      <AppLoading isVisible={true} />
     );
   }
 }

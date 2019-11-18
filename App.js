@@ -26,7 +26,7 @@ export default class App extends Component {
           barStyle="light-content"
         />
         <Provider store={store}>
-          <PersistGate loading={<AppLoading />} persistor={persistor}>
+          <PersistGate loading={<AppLoading isVisible={true} />} persistor={persistor}>
             <AppNavigation ref={navigatorRef => {
               navigationServices.setTopLevelNavigator(navigatorRef);
             }} />

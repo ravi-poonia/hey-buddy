@@ -17,7 +17,7 @@ const persistConfig = {
 const appReducer = combineReducers(reducer);
 
 const rootReducer = (state, action) => {
-  if (action.type === types.LOG_OUT_FULFILLED) {
+  if (action.type === types.LOGOUT_FULFILLED) {
     state = {};
   }
   return appReducer(state, action);
