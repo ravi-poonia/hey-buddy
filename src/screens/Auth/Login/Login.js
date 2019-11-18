@@ -19,7 +19,10 @@ export default class Login extends Component {
 
   state = {
     selectedTab: 'login',
-    formData: {},
+    formData: {
+      email: 'yash@yomail.com',
+      password: '12345678',
+    },
   }
 
   renderTabs = () => {
@@ -58,7 +61,14 @@ export default class Login extends Component {
     );
   }
 
+  handleTextChange = (id, value) => {
+    let { formData } = this.state;
+    formData[id] = value;
+    this.setState({ formData });
+  }
+
   renderLoginContent = () => {
+    const { formData } = this.state;
     return (
       <>
         <CustomInput
@@ -69,6 +79,8 @@ export default class Login extends Component {
               size={25}
               color="#bdc5cf" />
           }
+          value={formData.email}
+          onChangeText={(value) => this.handleTextChange('email', value)}
           placeholder="Username"
         />
         <CustomInput
@@ -79,6 +91,9 @@ export default class Login extends Component {
               size={20}
               color="#bdc5cf" />
           }
+          value={formData.password}
+          type="password"
+          onChangeText={(value) => this.handleTextChange('password', value)}
           placeholder="Password"
         />
       </>
@@ -163,7 +178,12 @@ export default class Login extends Component {
   }
 
   handleButtonPress = () => {
-    console.log('-----> handleButtonPress');
+    const { selectedTab, formData } = this.state;
+    const { email, password } = formData;
+
+    if (selectedTab === 'login') {
+      this.props.login({ email, password });
+    }
   }
 
   renderButton = () => {

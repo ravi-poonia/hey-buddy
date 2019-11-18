@@ -1,7 +1,9 @@
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import AuthLoading from './AuthLoading';
 
 export default connect(
-  state => ({}),
+  state => ({
+    authToken: state.auth.authToken,
+  }),
   dispatch => ({}),
 )(AuthLoading);

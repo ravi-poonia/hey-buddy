@@ -1,0 +1,1 @@
+export const BASE_URL = 'http://ec2-15-206-22-222.ap-south-1.compute.amazonaws.com/hey-buddy/public/api';

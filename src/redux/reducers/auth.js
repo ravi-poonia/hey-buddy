@@ -1,16 +1,16 @@
-import {LOGIN} from '../actions/actionTypes';
+import { LOGIN } from '../actions/actionTypes';
 
-const initialstate = {
+const initialState = {
   isLoading: false,
   isLogged: false,
   isRegistered: false,
   hasError: false,
+  authToken: null,
   errorMessage: '',
   user: {},
 };
 
-export default (state = initialstate, action) => {
-  console.log('-----> action.type', action.type);
+export default (state = initialState, action) => {
   switch (action.type) {
     case `${LOGIN}_PENDING`:
       return {
@@ -20,10 +20,13 @@ export default (state = initialstate, action) => {
         errorMessage: null,
       };
     case `${LOGIN}_FULFILLED`:
+      const { authToken, user } = action.payload;
       return {
         ...state,
         isLoading: false,
         hasError: false,
+        authToken: authToken,
+        user: user,
         errorMessage: null,
       };
     case `${LOGIN}_REJECTED`:

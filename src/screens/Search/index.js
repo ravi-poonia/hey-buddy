@@ -1,8 +1,7 @@
 import { connect } from 'react-redux';
-import Home from './Home';
+import SearchScreen from './Search';
 
 export default connect(
-  state => ({
-  }),
+  state => ({}),
   dispatch => ({}),
-)(Home);
+)(SearchScreen);

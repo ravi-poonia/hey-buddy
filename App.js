@@ -14,14 +14,10 @@ import SplashScreen from 'react-native-splash-screen';
 import { store, persistor } from './src/redux/Store';
 import AppNavigation from './src/navigation/AppNavigation';
 import { Colors } from './src/styles';
+import navigationServices from './src/utils/navigationServices';
+import { AppLoading } from './src/components/AppLoading';
 
 export default class App extends Component {
-  componentDidMount() {
-    setTimeout(() => {
-      SplashScreen.hide();
-    }, 3000);
-  }
-
   render() {
     return (
       <>
@@ -30,8 +26,10 @@ export default class App extends Component {
           barStyle="light-content"
         />
         <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <AppNavigation />
+          <PersistGate loading={<AppLoading />} persistor={persistor}>
+            <AppNavigation ref={navigatorRef => {
+              navigationServices.setTopLevelNavigator(navigatorRef);
+            }} />
           </PersistGate>
         </Provider>
       </>

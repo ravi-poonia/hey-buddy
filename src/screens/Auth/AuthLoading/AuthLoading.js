@@ -6,15 +6,27 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {View, Text} from 'react-native';
+import React, { Component } from 'react';
+import { AppLoading } from '../../../components/AppLoading';
+import SplashScreen from 'react-native-splash-screen';
 
 export default class AuthLoading extends Component {
+
+  componentDidMount() {
+    const { authToken, navigation } = this.props;
+    if (authToken) {
+      navigation.navigate('App');
+    }
+    else {
+      navigation.navigate('Auth');
+    }
+    //Hide splash screen
+    SplashScreen.hide();
+  }
+
   render() {
     return (
-      <View>
-        <Text>AuthLoading Screen</Text>
-      </View>
+      <AppLoading />
     );
   }
 }

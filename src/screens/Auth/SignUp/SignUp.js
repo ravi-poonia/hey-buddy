@@ -6,10 +6,10 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {View, Text} from 'react-native';
+import React, { Component } from 'react';
+import { View, Text } from 'react-native';
 
-export default class SignUp extends Component<any> {
+export default class SignUp extends Component {
   render() {
     return (
       <View>
