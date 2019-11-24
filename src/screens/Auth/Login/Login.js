@@ -73,9 +73,18 @@ export default class Login extends Component {
   }
 
   renderLoginContent = (formProps) => {
+    const { errorMessage } = this.props;
     const { handleChange, handleBlur, errors, values, handleSubmit } = formProps;
     return (
       <>
+        {
+          errorMessage ?
+            <Text style={styles.error}>
+              {errorMessage}
+            </Text>
+            :
+            null
+        }
         <CustomInput
           icon={
             <MaterialIcon
@@ -133,7 +142,6 @@ export default class Login extends Component {
   }
 
   handleSubmit = (values) => {
-    console.log('submit', values);
     const { selectedTab } = this.state;
     const { email, password, phone_number } = values;
 
@@ -340,13 +348,17 @@ const styles = StyleSheet.create({
     borderBottomColor: '#d6af11',
     borderBottomWidth: 2,
   },
-  tab: {
-  },
+  tab: {},
   activeTabText: {
     color: '#1748ad',
   },
   tabText: {
     color: '#cccccc',
+  },
+  error: {
+    paddingVertical: 10,
+    color: 'red',
+    textAlign: 'center',
   },
   inputIcon: {
     marginHorizontal: 10,

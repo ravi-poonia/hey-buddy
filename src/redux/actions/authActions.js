@@ -8,15 +8,15 @@ export const login = (data) => ({
     try {
       let response = await authService.login(data);
       if (response) {
-        const { token } = response.data;
-        return resolve({ authToken: token, user: {} });
+        const { token } = response.data.data;
+        return resolve({ authToken: token, user: response.data.data });
       }
       return reject(new Error({
         data: 'An error occurred. Please try again.',
       }));
     } catch (error) {
       let message = error.response ? error.response.data.message : 'An error occurred. Please try again.';
-      return reject({ data: message });
+      return reject(message);
     }
   }),
 });

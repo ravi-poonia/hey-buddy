@@ -43,7 +43,6 @@ export default class OtpScreen extends Component {
   verifyPhone = (phoneNumber) => {
     authRef.signInWithPhoneNumber(`+91${phoneNumber}`)
       .then((confirmResult) => {
-        console.log('----->confirmResult ');
         this.setState({ confirmResult });
       })
       .catch((error) => {

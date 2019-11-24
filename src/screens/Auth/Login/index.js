@@ -5,7 +5,8 @@ import navigationServices from '../../../utils/navigationServices';
 
 export default connect(
   state => ({
-    loading: state.auth.isLoading,
+    loading: state.authStatus.isLoading,
+    errorMessage: state.authStatus.errorMessage,
   }),
   dispatch => ({
     login: (data) => {

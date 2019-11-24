@@ -23,7 +23,6 @@ export default class SearchScreen extends Component {
 
   render() {
     let { searchText } = this.state;
-    console.log('-----> SearchScreen');
     return (
       <SearchLayout
         onChangeQuery={this._handleQueryChange}

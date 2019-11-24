@@ -5,15 +5,13 @@ import { StackActions, NavigationActions } from 'react-navigation';
 
 export default connect(
   state => ({
-    loading: state.auth.isLoading,
-    errorMessage: state.auth.errorMessage,
+    loading: state.authStatus.isLoading,
+    errorMessage: state.authStatus.errorMessage,
   }),
   dispatch => ({
     signup: (data, navigation) => {
       dispatch(authActions.signup(data))
-        .then((res, values) => {
-          console.log('----->values ', values);
-
+        .then((res) => {
           const resetAction = StackActions.reset({
             index: 0,
             key: null,
