@@ -7,15 +7,15 @@
  */
 
 import React, { Component } from 'react';
-import { View, ScrollView, Text, Image, ImageBackground, StyleSheet, Platform, TouchableOpacity } from 'react-native';
+import { View, ScrollView, Text, Image, ImageBackground, StyleSheet, TouchableOpacity } from 'react-native';
 import { Spacing } from '../../../styles';
 import CustomInput from '../../../components/CustomInput';
 import MaterialIcon from 'react-native-vector-icons/dist/MaterialIcons';
 import FeatherIcon from 'react-native-vector-icons/dist/Feather';
-import SimpleLineIcons from 'react-native-vector-icons/dist/SimpleLineIcons';
-import CustomPicker from '../../../components/CustomPicker';
 import { AppLoading } from '../../../components/AppLoading';
-import { KeyboardAvoidingView } from 'react-native';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import SignUp from '../SignUp';
 
 export default class Login extends Component {
 
@@ -23,13 +23,13 @@ export default class Login extends Component {
 
   state = {
     selectedTab: 'login',
-    formData: {
-      email: 'yash@yomail.com',
-      password: '12345678',
-    },
   }
 
-  renderTabs = () => {
+  componentDidMount() {
+    this.props.getCourseList();
+  }
+
+  renderTabs = (formProps) => {
     const { selectedTab } = this.state;
 
     const TABS = [
@@ -52,7 +52,10 @@ export default class Login extends Component {
 
           return (
             <TouchableOpacity
-              onPress={() => this.setState({ selectedTab: tab.value })}
+              onPress={() => {
+                formProps.handleReset();
+                this.setState({ selectedTab: tab.value });
+              }}
               style={tabContainer}
               key={tab.value}>
               <Text style={tabText}>
@@ -69,14 +72,8 @@ export default class Login extends Component {
     this.inputs[id].focus();
   }
 
-  handleTextChange = (id, value) => {
-    let { formData } = this.state;
-    formData[id] = value;
-    this.setState({ formData });
-  }
-
-  renderLoginContent = () => {
-    const { formData } = this.state;
+  renderLoginContent = (formProps) => {
+    const { handleChange, handleBlur, errors, values, handleSubmit } = formProps;
     return (
       <>
         <CustomInput
@@ -87,17 +84,18 @@ export default class Login extends Component {
               size={25}
               color="#bdc5cf" />
           }
-          autoCompleteType={'username'}
+          autoCompleteType={'email'}
           onSubmitEditing={() => { this.focusTheField('password'); }}
           blurOnSubmit={false}
-          autoFocus={true}
+          onBlur={handleBlur('email')}
           enablesReturnKeyAutomatically={true}
           keyboardType={'email-address'}
           returnKeyType={'next'}
-          textContentType={'username'}
-          value={formData.email}
-          onChangeText={(value) => this.handleTextChange('email', value)}
-          placeholder="Username"
+          textContentType="username"
+          value={values.email}
+          error={errors.email}
+          onChangeText={handleChange('email')}
+          placeholder="Email"
         />
         <CustomInput
           getRef={input => { this.inputs.password = input; }}
@@ -108,154 +106,25 @@ export default class Login extends Component {
               size={20}
               color="#bdc5cf" />
           }
+          onSubmitEditing={handleSubmit}
           autoCompleteType={'password'}
+          onBlur={handleBlur('password')}
           textContentType={'password'}
           secureTextEntry={true}
-          value={formData.password}
-          onChangeText={(value) => this.handleTextChange('password', value)}
+          value={values.password}
+          error={errors.password}
+          onChangeText={handleChange('password')}
           placeholder="Password"
         />
       </>
     );
   }
 
-  handleCourseChange = (id, value) => {
-    const { formData } = this.state;
-    formData[id] = value;
-    this.setState({ formData });
-  }
-
-  renderSignUpContent = () => {
-    const { formData } = this.state;
-    return (
-      <>
-        <CustomInput
-          icon={
-            <MaterialIcon
-              style={styles.inputIcon}
-              name="person-outline"
-              size={25}
-              color="#bdc5cf" />
-          }
-          placeholder="First Name"
-        />
-        <CustomInput
-          icon={
-            <MaterialIcon
-              style={styles.inputIcon}
-              name="person-outline"
-              size={25}
-              color="#bdc5cf" />
-          }
-          placeholder="Last Name"
-        />
-        <CustomInput
-          icon={
-            <FeatherIcon
-              style={styles.inputIcon}
-              name="lock"
-              size={20}
-              color="#bdc5cf" />
-          }
-          placeholder="Password"
-        />
-        <CustomInput
-          icon={
-            <FeatherIcon
-              style={styles.inputIcon}
-              name="phone"
-              size={20}
-              color="#bdc5cf" />
-          }
-          placeholder="Phone number"
-        />
-        <CustomPicker
-          getRef={this.picker}
-          icon={
-            <SimpleLineIcons
-              style={styles.inputIcon}
-              name="graduation"
-              size={20}
-              color="#bdc5cf" />
-          }
-          id="course"
-          placeholder={{
-            label: 'Select a course...',
-            value: null,
-            color: '#9EA0A4',
-          }}
-          value={formData.course}
-          onChange={this.handleCourseChange}
-          options={[
-            {
-              label: 'Engineering',
-              value: 'Engineering',
-            },
-            {
-              label: 'Medical',
-              value: 'Medical',
-            },
-          ]}
-        />
-        <CustomInput
-          id="blood_group"
-          icon={
-            <SimpleLineIcons
-              style={styles.inputIcon}
-              name="drop"
-              size={20}
-              color="#bdc5cf" />
-          }
-          placeholder="Blood Group"
-        />
-        <CustomInput
-          getRef={input => { this.inputs.password = input; }}
-          icon={
-            <FeatherIcon
-              style={styles.inputIcon}
-              name="lock"
-              size={20}
-              color="#bdc5cf" />
-          }
-          autoCompleteType={'password'}
-          textContentType={'password'}
-          secureTextEntry={true}
-          value={formData.password}
-          onChangeText={(value) => this.handleTextChange('password', value)}
-          placeholder="Password"
-        />
-        <CustomInput
-          getRef={input => { this.inputs.password = input; }}
-          icon={
-            <FeatherIcon
-              style={styles.inputIcon}
-              name="lock"
-              size={20}
-              color="#bdc5cf" />
-          }
-          secureTextEntry={true}
-          value={formData.password}
-          onChangeText={(value) => this.handleTextChange('password', value)}
-          placeholder="Confirm Password"
-        />
-      </>
-    );
-  }
-
-  handleButtonPress = () => {
-    const { selectedTab, formData } = this.state;
-    const { email, password } = formData;
-
-    if (selectedTab === 'login') {
-      this.props.login({ email, password });
-    }
-  }
-
-  renderButton = () => {
+  renderButton = (formProps) => {
     return (
       <TouchableOpacity
         style={styles.buttonWrapper}
-        onPress={this.handleButtonPress}>
+        onPress={formProps.handleSubmit}>
         <ImageBackground
           style={styles.gradientImage}
           source={require('./../../../assets/images/loginButton.png')} />
@@ -263,60 +132,156 @@ export default class Login extends Component {
     );
   }
 
+  handleSubmit = (values) => {
+    console.log('submit', values);
+    const { selectedTab } = this.state;
+    const { email, password, phone_number } = values;
+
+    if (selectedTab === 'login') {
+      this.props.login({ email, password });
+    }
+    else {
+      this.props.navigation.navigate('OtpScreen', { data: values, phoneNumber: phone_number });
+      // this.props.signup(values);
+    }
+  }
+
+  equalTo(ref, msg) {
+    return Yup.mixed().test({
+      name: 'equalTo',
+      exclusive: false,
+      message: msg || '${path} must be the same as ${reference}',
+      params: {
+        reference: ref.path,
+      },
+      test: function (value) {
+        return value === this.resolve(ref);
+      },
+    });
+  }
+
   render() {
     const { selectedTab } = this.state;
     const { loading } = this.props;
 
+    const mobileRegex = /^[6-9]\d{9}$/;
+
+    Yup.addMethod(Yup.string, 'equalTo', this.equalTo);
+
+    const Schema = {
+      login: Yup.object().shape({
+        email: Yup.string()
+          .email('Please enter valid email')
+          .required('Please enter valid email'),
+        password: Yup.string()
+          .min(2, 'Too Short!')
+          .max(50, 'Too Long!')
+          .required('Please enter password!'),
+      }),
+
+      signup: Yup.object().shape({
+        first_name: Yup.string()
+          .min(2, 'Too Short!')
+          .max(50, 'Too Long!')
+          .required('Please enter first name'),
+        last_name: Yup.string()
+          .min(2, 'Too Short!')
+          .max(50, 'Too Long!')
+          .required('Please enter last name'),
+        username: Yup.string()
+          .min(2, 'Too Short!')
+          .max(50, 'Too Long!')
+          .required('Please enter username'),
+        email: Yup.string()
+          .email('Please enter valid email')
+          .required('Please enter valid email'),
+        password: Yup.string()
+          .min(2, 'Too Short!')
+          .max(50, 'Too Long!')
+          .required('Please enter password!'),
+        course_id: Yup.number()
+          .required('Please select a course!'),
+        phone_number: Yup.string()
+          .matches(mobileRegex, 'Phone number is not valid')
+          .required('Please enter phone number!'),
+        blood_group: Yup.string()
+          .max(4, 'Too Long!')
+          .required('Please enter blood group!'),
+        confirm_password: Yup.string()
+          .min(2, 'Too Short!')
+          .max(50, 'Too Long!')
+          .equalTo(Yup.ref('password'), 'Passwords must match')
+          .required('Please confirm password'),
+      }),
+    };
+
     return (
-      <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : undefined} enabled>
+      <ImageBackground
+        source={require('./../../../assets/images/login-background.png')}
+        style={styles.imageTopContainer}>
         <AppLoading isVisible={loading} />
-        <ImageBackground
-          source={require('./../../../assets/images/login-background.png')}
-          style={styles.imageTopContainer}>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.scrollView}>
-            <View style={styles.container}>
-              <View style={styles.topContainer}>
-                <Image
-                  source={require('./../../../assets/images/logo.png')}
-                  resizeMode="contain"
-                  style={styles.logo} />
-              </View>
-              <View >
-                <View style={styles.bodyContainer}>
-                  <View style={styles.boxContainer}>
-                    {this.renderTabs()}
-                    {
-                      selectedTab === 'login' ?
-                        this.renderLoginContent()
-                        :
-                        this.renderSignUpContent()
-                    }
+        <Formik
+          validateOnChange={false}
+          validateOnBlur={false}
+          validationSchema={Schema[selectedTab]}
+          initialValues={{
+            email: this.props.navigation.getParam('email'),
+          }}
+          onSubmit={this.handleSubmit}
+        >
+          {/* {({ handleChange, handleBlur, handleSubmit, values }) => ( */}
+          {(formProps) => (
+            //TODO:: Try Manual auto scrolling to input on focus instead of adjustPan.
+            <ScrollView
+              keyboardShouldPersistTaps="handled"
+              keyboardDismissMode="on-drag"
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.scrollView}>
+              <View style={styles.container}>
+                <View style={styles.topContainer}>
+                  <Image
+                    source={require('./../../../assets/images/logo.png')}
+                    resizeMode="contain"
+                    style={styles.logo} />
+                </View>
+                <View >
+                  <View style={styles.bodyContainer}>
+                    <View style={styles.boxContainer}>
+                      {this.renderTabs(formProps)}
+                      {
+                        selectedTab === 'login' ?
+                          this.renderLoginContent(formProps)
+                          :
+                          <SignUp
+                            styles={styles}
+                            formProps={formProps}
+                          />
+                      }
+                    </View>
                   </View>
+                  {this.renderButton(formProps)}
                 </View>
-                {this.renderButton()}
-              </View>
-              <View style={styles.bottomContainer}>
-                <View style={styles.textContainer}>
-                  <Text style={styles.orText}>OR </Text>
-                  <Text style={styles.boldText}>
-                    {
-                      selectedTab === 'login' ?
-                        ' SignIn with'
-                        :
-                        ' SignUp with'
-                    }
-                  </Text>
+                <View style={styles.bottomContainer}>
+                  <View style={styles.textContainer}>
+                    <Text style={styles.orText}>OR </Text>
+                    <Text style={styles.boldText}>
+                      {
+                        selectedTab === 'login' ?
+                          ' SignIn with'
+                          :
+                          ' SignUp with'
+                      }
+                    </Text>
+                  </View>
+                  <TouchableOpacity style={styles.googleButton}>
+                    <Text style={styles.googleText}>Google</Text>
+                  </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.googleButton}>
-                  <Text style={styles.googleText}>Google</Text>
-                </TouchableOpacity>
               </View>
-            </View>
-          </ScrollView>
-        </ImageBackground >
-      </KeyboardAvoidingView>
+            </ScrollView>
+          )}
+        </Formik>
+      </ImageBackground >
     );
   }
 }
@@ -354,7 +319,7 @@ const styles = StyleSheet.create({
   boxContainer: {
     paddingHorizontal: 20,
     paddingTop: 10,
-    paddingBottom: 50,
+    paddingBottom: 40,
     width: '90%',
     backgroundColor: '#fff',
     borderRadius: 10,

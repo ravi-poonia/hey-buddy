@@ -1,7 +1,9 @@
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import SignUp from './SignUp';
 
 export default connect(
-  state => ({}),
+  state => ({
+    courseList: state.auth.courseList,
+  }),
   dispatch => ({}),
 )(SignUp);

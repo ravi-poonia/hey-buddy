@@ -1,35 +1,49 @@
+/* eslint-disable react-native/no-inline-styles */
 
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import RNPickerSelect, { defaultStyles } from 'react-native-picker-select';
+import { View, StyleSheet, Text } from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
 import EntypoIcon from 'react-native-vector-icons/dist/Entypo';
 
-export default function CustomPicker({ id = '', icon, getRef, value, onChange, options, ...rest }) {
+export default function CustomPicker({ id = '', icon, error, getRef, value, onChange, options, ...rest }) {
+
+  if (typeof value === 'string') {
+    value = options.filter(option => option.value === value)[0];
+  }
 
   return (
     <View style={styles.container}>
-      {icon}
-      <RNPickerSelect
-        {...rest}
-        ref={getRef}
-        onValueChange={(newValue, index) => onChange(id, newValue, index)}
-        items={options}
-        style={{
-          ...pickerSelectStyles,
-          iconContainer: {
-            top: 10,
-            right: 12,
-          },
-        }}
-        useNativeAndroidPickerStyle={false}
-        Icon={() => {
-          return <EntypoIcon
-            style={styles.inputIcon}
-            name="chevron-thin-down"
-            size={20}
-            color="#bdc5cf" />;
-        }}
-      />
+      <View style={[styles.inputContainer, {
+        borderColor: error ? 'red' : '#cccccc',
+      }]}>
+        {icon}
+        <RNPickerSelect
+          {...rest}
+          ref={getRef}
+          onValueChange={onChange}
+          items={options}
+          style={{
+            ...pickerSelectStyles,
+            iconContainer: {
+              top: 10,
+              right: 12,
+            },
+          }}
+          useNativeAndroidPickerStyle={false}
+          Icon={() => {
+            return <EntypoIcon
+              style={styles.inputIcon}
+              name="chevron-thin-down"
+              size={20}
+              color="#bdc5cf" />;
+          }}
+        />
+      </View>
+      {error &&
+        <View style={styles.errorContainer}>
+          <Text style={styles.error}>{error}</Text>
+        </View>
+      }
     </View>
   );
 }
@@ -42,15 +56,17 @@ CustomPicker.defaultProps = {
 
 const styles = StyleSheet.create({
   container: {
+    height: 65,
+    marginTop: 5,
+  },
+  inputContainer: {
     flexDirection: 'row',
-    marginVertical: 10,
     alignItems: 'center',
     borderRadius: 40,
-    flex: 1,
+    display: 'flex',
     height: 45,
     paddingRight: 20,
     borderWidth: 1,
-    borderColor: '#cccccc',
     backgroundColor: '#fff',
   },
   picker: {
@@ -61,6 +77,15 @@ const styles = StyleSheet.create({
   },
   item: {
     color: '#424242',
+  },
+  errorContainer: {
+    width: '100%',
+    paddingLeft: 20,
+  },
+  error: {
+    color: 'red',
+    fontSize: 12,
+    lineHeight: 15,
   },
 });
 

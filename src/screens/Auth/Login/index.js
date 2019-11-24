@@ -14,5 +14,8 @@ export default connect(
           navigationServices.navigate('App');
         });
     },
+    getCourseList: () => {
+      dispatch(authActions.getCourseList());
+    },
   }),
 )(Login);

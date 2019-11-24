@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "866129780840",
+    "firebase_url": "https://hey-buddy-39d0a.firebaseio.com",
+    "project_id": "hey-buddy-39d0a",
+    "storage_bucket": "hey-buddy-39d0a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:866129780840:android:1b453ce868302b38511bdd",
+        "android_client_info": {
+          "package_name": "com.heybuddy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "866129780840-7its5kdmjnu2sbd995v5lfvrlg3bjqfk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.heybuddy",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "866129780840-rrte6frk75cnhsrte3jub1ou8p6keabb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2_AJuV-5GSCBESVtYiJNJtkiibeKkbe8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "866129780840-rrte6frk75cnhsrte3jub1ou8p6keabb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
